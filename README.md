@@ -66,10 +66,11 @@ Once all the containers are running, open your web browser and navigate to:
 * **Toggle KML Layers:** Click the "Overlays" button in the header to open a menu. You can check or uncheck the boxes to show or hide the KML layers you've added.
 
 ## Project Structure
-
+```
 sitrep-mvp/
 ├── backend/              # FastAPI backend API
 ├── frontend/             # React frontend application
 ├── kml_files/            # Directory for your KML overlays
 ├── nginx/                # Nginx configuration and Dockerfile
 └── docker-compose.yml    # Main Docker
+```
