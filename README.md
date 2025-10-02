@@ -67,4 +67,9 @@ Once all the containers are running, open your web browser and navigate to:
 
 ## Project Structure
 
-sitrep-mvp/├── backend/              # FastAPI backend API├── frontend/             # React frontend application├── kml_files/            # Directory for your KML overlays├── nginx/                # Nginx configuration and Dockerfile└── docker-compose.yml    # Main Docker
+sitrep-mvp/
+├── backend/              # FastAPI backend API
+├── frontend/             # React frontend application
+├── kml_files/            # Directory for your KML overlays
+├── nginx/                # Nginx configuration and Dockerfile
+└── docker-compose.yml    # Main Docker
