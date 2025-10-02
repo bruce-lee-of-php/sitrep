@@ -35,16 +35,20 @@ The project is built with a modern, reliable, and scalable technology stack.
 Getting the application running is straightforward, provided you have Docker and Docker Compose installed.
 
 **1. Clone the Repository**
+```bash
+git clone https://github.com/bruce-lee-of-php/sitrep.git
 
-git clone <your-repository-url>cd sitrep-mvp
+cd sitrep-mvp
+```
 **2. Add KML Files (Optional)**
 
 Now copy your `.kml` files into this the `kml_files` directory
 **3. Build and Run with Docker Compose**
 
 From the root directory of the project (`sitrep-mvp/`), run the following command:
-
+```bash
 docker-compose up --build
+```
 This command will build the images for each service, create the containers, and start the application.
 
 **4. Access the Application**
