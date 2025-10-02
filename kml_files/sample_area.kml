@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Sample Operational Area</name>
+    <Placemark>
+      <name>Downtown Ferndale</name>
+      <description>Primary area of interest.</description>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -83.138,42.463
+              -83.132,42.463
+              -83.132,42.458
+              -83.138,42.458
+              -83.138,42.463
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>

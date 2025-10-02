@@ -1,0 +1,47 @@
+.layer-toggle {
+  position: relative; /* Needed for dropdown positioning */
+  margin-left: auto; /* Pushes the button to the right side of the header */
+}
+
+.toggle-button {
+  background-color: #4a505a;
+  color: white;
+  border: 1px solid #6c757d;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.layer-menu {
+  position: absolute;
+  top: 120%; /* Position below the button */
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  width: 250px;
+  z-index: 1100; /* Ensure it's above the header and map */
+  color: #333;
+}
+
+.layer-menu h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.layer-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.layer-item label {
+  margin-left: 10px;
+  cursor: pointer;
+}

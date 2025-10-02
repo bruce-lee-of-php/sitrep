@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "8085:80"
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - ./kml_files:/usr/share/nginx/html/kml:ro
+    networks:
+      - sitrep-net
+
+  db:
+    image: postgis/postgis:16-3.4
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=sitrep_db
+    networks:
+      - sitrep-net
+
+  backend:
+    build: ./backend
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./backend:/app
+      - ./kml_files:/app/kml_files:ro
+    depends_on:
+      - db
+    networks:
+      - sitrep-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - sitrep-net
+
+networks:
+  sitrep-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+
