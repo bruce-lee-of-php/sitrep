@@ -4,3 +4,9 @@ sqlalchemy
 psycopg2-binary
 geoalchemy2
 python-dotenv
+fastkml
+shapely
+geojson
+beautifulsoup4
+lxml
+httpx

@@ -1,0 +1,46 @@
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+}
+
+.description-table {
+  max-height: 200px;
+  overflow-y: auto;
+  font-size: 12px;
+}
+
+.description-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.description-row:last-child {
+  border-bottom: none;
+}
+
+.description-row strong {
+  font-weight: bold;
+  word-break: break-word;
+}
+
+/* --- NEW STYLES for the custom click popup --- */
+.custom-popup h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+
+.custom-popup ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.custom-popup li {
+  padding: 5px 0;
+}
+

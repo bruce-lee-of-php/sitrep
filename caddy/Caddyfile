@@ -1,0 +1,11 @@
+localhost {
+    # Enable gzip compression for better performance
+    encode gzip
+
+    # Reverse proxy API calls to the backend service
+    reverse_proxy /api/* backend:8000
+
+    # Reverse proxy all other requests to the frontend service
+    # The 'frontend' service is the Nginx container serving the static index.html
+    reverse_proxy * frontend:80
+}

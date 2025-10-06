@@ -1,21 +1,9 @@
-# Use a standard Node.js image for development
-FROM node:20-alpine
+# Use a lightweight Nginx image to serve the static HTML file
+FROM nginx:alpine
 
-# Set the working directory inside the container
-WORKDIR /app
+# Remove the default Nginx welcome page
+RUN rm /usr/share/nginx/html/index.html
 
-# Copy package files and install dependencies
-# This is done in a separate step to leverage Docker's layer caching
-COPY package*.json ./
-RUN npm install
-
-# Copy the rest of the application source code
-COPY . .
-
-# Expose the port Vite uses
-EXPOSE 5173
-
-# The command to start the Vite development server
-# 'npm run dev' is the standard for Vite projects
-CMD ["npm", "run", "dev"]
+# Copy our single-file application into the Nginx html directory
+COPY index.html /usr/share/nginx/html/index.html
 
