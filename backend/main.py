@@ -34,11 +34,21 @@ reports_table = Table(
     Column('is_urgent', String),
     Column('granularity', String),
     Column('description', String, nullable=True),
-    Column('location', Geometry('POINTZ', srid=4326), nullable=False)
+    Column('location', Geometry('POINTZ', srid=4326), nullable=False),
+    # 'manual' for form-submitted reports; the radio-worker sets its own label
+    # (e.g. 'radio') so map clients can distinguish auto-ingested reports.
+    Column('source', String, nullable=True, server_default='manual')
 )
 
 # Create the table if it doesn't exist
 metadata.create_all(bind=engine)
+
+# create_all won't alter a pre-existing 'reports' table, so add the 'source'
+# column idempotently for databases created before this column existed.
+with engine.begin() as conn:
+    conn.execute(text(
+        "ALTER TABLE reports ADD COLUMN IF NOT EXISTS source VARCHAR DEFAULT 'manual';"
+    ))
 
 app = FastAPI()
 
@@ -90,7 +100,7 @@ class KMLFeature(BaseModel):
 # --- API Endpoints ---
 @app.get("/api/reports")
 def get_reports(db: Session = Depends(get_db)):
-    query = text("SELECT id, event_type, ST_AsGeoJSON(location) as location, description FROM reports;")
+    query = text("SELECT id, event_type, ST_AsGeoJSON(location) as location, description, source FROM reports;")
     result = db.execute(query).fetchall()
     reports_list = []
     for row in result:
@@ -99,7 +109,8 @@ def get_reports(db: Session = Depends(get_db)):
             "id": row[0],
             "type": row[1],
             "location": [location_geojson['coordinates'][1], location_geojson['coordinates'][0]], # lat, lon
-            "description": row[3]
+            "description": row[3],
+            "source": row[4] or "manual"
         })
     return reports_list
 

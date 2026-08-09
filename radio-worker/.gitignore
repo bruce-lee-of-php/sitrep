@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+inbox/*.txt
+processed/*
+!inbox/.gitkeep
+!processed/.gitkeep

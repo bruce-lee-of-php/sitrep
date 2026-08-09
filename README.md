@@ -70,7 +70,18 @@ Once all the containers are running, open your web browser and navigate to:
 sitrep-mvp/
 ├── backend/              # FastAPI backend API
 ├── frontend/             # React frontend application
+├── radio-worker/         # Ingests emergency radio chatter into map reports
 ├── kml_files/            # Directory for your KML overlays
 ├── nginx/                # Nginx configuration and Dockerfile
 └── docker-compose.yml    # Main Docker
 ```
+
+## Radio Chatter Ingestion
+
+The `radio-worker` service automatically turns emergency radio chatter into map
+reports: it extracts the event type, urgency, and location from each
+transmission, geocodes the location, and drops a pin on the map. Text sources
+are supported today (drop `.txt` transmissions into `radio-worker/inbox/`);
+audio/scanner ingestion via OpenMHz + Whisper is scaffolded for later. See
+[`radio-worker/README.md`](radio-worker/README.md) for details and
+configuration.

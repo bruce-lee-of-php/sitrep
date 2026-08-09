@@ -51,6 +51,35 @@ services:
     networks:
       - sitrep-net
 
+  # Ingests emergency radio chatter (text sources for now) and turns it into
+  # map reports: extract -> geocode -> insert into the reports table.
+  radio-worker:
+    build: ./radio-worker
+    depends_on:
+      - db
+    environment:
+      # DB (shared with backend)
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=sitrep_db
+      # Source: text inbox. Drop .txt files (one transmission each) into
+      # ./radio-worker/inbox and they get processed and archived.
+      - RADIO_SOURCE=text
+      - TEXT_INBOX_DIR=/data/inbox
+      - TEXT_ARCHIVE_DIR=/data/processed
+      - POLL_INTERVAL=10
+      # Extraction: Claude when a key is set, rules fallback otherwise.
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      # Optional geocode bias so bare street names resolve to the right area,
+      # e.g. GEOCODE_REGION_HINT="Portland, Oregon"
+      - GEOCODE_REGION_HINT=${GEOCODE_REGION_HINT:-}
+    volumes:
+      - ./radio-worker:/app
+      - ./radio-worker/inbox:/data/inbox
+      - ./radio-worker/processed:/data/processed
+    networks:
+      - sitrep-net
+
 networks:
   sitrep-net:
     driver: bridge

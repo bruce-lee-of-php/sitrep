@@ -1,0 +1,8 @@
+# Active (text-source) dependencies
+httpx
+psycopg2-binary
+anthropic
+
+# --- Audio path (OpenMHz + speech-to-text), disabled while text-only ---
+# Uncomment these (and add ffmpeg to the Dockerfile) to enable audio ingestion:
+# faster-whisper
