@@ -21,8 +21,10 @@ DB_HOST = os.getenv("POSTGRES_HOST", "db")
 DB_PORT = os.getenv("POSTGRES_PORT", "5432")
 
 # --- Source ---
-# Which source adapter to use: "text" (default, active) or "openmhz" (scaffolded
-# for later — needs faster-whisper + ffmpeg in the image).
+# Which source adapter to use:
+#   "text"     — watched inbox of .txt files (default, active)
+#   "mastodon" — poll a public Mastodon account's posts (active, text-only)
+#   "openmhz"  — scaffolded for later (needs faster-whisper + ffmpeg)
 SOURCE = os.getenv("RADIO_SOURCE", "text").strip().lower()
 
 # Text source: a watched inbox of .txt files, one transmission per file. Drop a
@@ -30,6 +32,13 @@ SOURCE = os.getenv("RADIO_SOURCE", "text").strip().lower()
 # volume in docker-compose to feed chatter in.
 TEXT_INBOX_DIR = os.getenv("TEXT_INBOX_DIR", "/data/inbox")
 TEXT_ARCHIVE_DIR = os.getenv("TEXT_ARCHIVE_DIR", "/data/processed")
+
+# Mastodon source: poll a public account (no auth needed for public posts).
+# INSTANCE e.g. "https://mastodon.social"; ACCOUNT e.g. "someScanner@host" or a
+# numeric account id.
+MASTODON_INSTANCE = os.getenv("MASTODON_INSTANCE", "").strip()
+MASTODON_ACCOUNT = os.getenv("MASTODON_ACCOUNT", "").strip()
+MASTODON_EXCLUDE_REPLIES = _get_bool("MASTODON_EXCLUDE_REPLIES", True)
 
 # OpenMHz system short name (e.g. "kcers1b"). Browse https://openmhz.com to find
 # a system that carries traffic for your area. Required for the openmhz source.

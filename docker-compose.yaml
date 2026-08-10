@@ -67,6 +67,10 @@ services:
       - RADIO_SOURCE=text
       - TEXT_INBOX_DIR=/data/inbox
       - TEXT_ARCHIVE_DIR=/data/processed
+      # To poll a public Mastodon scanner account instead, set RADIO_SOURCE=mastodon
+      # and provide the instance + account (no API key needed):
+      # - MASTODON_INSTANCE=https://mastodon.social
+      # - MASTODON_ACCOUNT=someScanner@mastodon.social
       - POLL_INTERVAL=10
       # Extraction: Claude when a key is set, rules fallback otherwise.
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}

@@ -25,6 +25,16 @@ def build_source() -> RadioSource:
         )
         return FileInboxSource(config.TEXT_INBOX_DIR, config.TEXT_ARCHIVE_DIR)
 
+    if config.SOURCE == "mastodon":
+        from sources.mastodon import MastodonSource
+
+        print(
+            f"[worker] source=mastodon instance={config.MASTODON_INSTANCE} "
+            f"account={config.MASTODON_ACCOUNT}",
+            flush=True,
+        )
+        return MastodonSource()
+
     if config.SOURCE == "openmhz":
         from sources.openmhz import OpenMHzSource
 

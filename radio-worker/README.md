@@ -12,10 +12,15 @@ below).
 
 ## How it works
 
-1. **Source** (`sources/`) — the active `FileInboxSource` watches an inbox
-   directory for `.txt` files (one transmission per file), processes each, and
-   moves it to an archive dir. `TextSource` (in-memory) backs the tests and
-   `inject.py`.
+1. **Source** (`sources/`) — pluggable, text-only for now:
+   - `FileInboxSource` (default) watches an inbox dir for `.txt` files (one
+     transmission per file), processes each, and archives it. `TextSource`
+     (in-memory) backs the tests and `inject.py`.
+   - `MastodonSource` polls a **public Mastodon account's posts** — a good free
+     scanner-feed source, no auth or API key needed. It resolves the account,
+     polls `/api/v1/accounts/:id/statuses` with a `since_id` cursor, and strips
+     each post's HTML to plain text. (Twitter/X is intentionally not supported —
+     its API is paywalled since 2023.)
 2. **Extract** (`extract/`) — pluggable. `ClaudeExtractor` (default when
    `ANTHROPIC_API_KEY` is set) returns structured JSON; `RulesExtractor` is the
    keyword/regex fallback with no key. Output `event_type` is constrained to the
@@ -40,6 +45,21 @@ cp radio-worker/samples/protest.txt radio-worker/inbox/     # one transmission
 
 A pin should appear at `http://localhost:8085`.
 
+### Using a Mastodon feed
+
+Point the worker at any public Mastodon account that posts scanner chatter
+(no API key needed). In `docker-compose.yaml`, set on the `radio-worker` service:
+
+```yaml
+- RADIO_SOURCE=mastodon
+- MASTODON_INSTANCE=https://mastodon.social
+- MASTODON_ACCOUNT=someScanner@mastodon.social
+```
+
+On first poll it primes its cursor and skips the backlog, then ingests new posts
+as they appear. Accounts are regional and some go dormant — pick one that
+actually covers your area.
+
 ### One-shot injection (no inbox, no audio)
 
 ```bash
@@ -51,9 +71,12 @@ docker-compose run --rm radio-worker python inject.py \
 
 | Var | Default | Purpose |
 |-----|---------|---------|
-| `RADIO_SOURCE` | `text` | `text` (active) or `openmhz` (needs audio deps) |
+| `RADIO_SOURCE` | `text` | `text`, `mastodon`, or `openmhz` (needs audio deps) |
 | `TEXT_INBOX_DIR` | `/data/inbox` | Watched inbox for `.txt` transmissions |
 | `TEXT_ARCHIVE_DIR` | `/data/processed` | Where processed files are moved |
+| `MASTODON_INSTANCE` | _(unset)_ | e.g. `https://mastodon.social` (for `mastodon` source) |
+| `MASTODON_ACCOUNT` | _(unset)_ | e.g. `someScanner@host` or a numeric id |
+| `MASTODON_EXCLUDE_REPLIES` | `true` | Skip reply posts |
 | `POLL_INTERVAL` | `30` | Seconds between polls |
 | `ANTHROPIC_API_KEY` | _(unset)_ | Set to use Claude extraction; unset ⇒ rules |
 | `CLAUDE_MODEL` | `claude-sonnet-5` | Model for the Claude extractor |
