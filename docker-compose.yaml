@@ -72,8 +72,9 @@ services:
       # - MASTODON_INSTANCE=https://mastodon.social
       # - MASTODON_ACCOUNT=someScanner@mastodon.social
       # Or poll one or more RSS/Atom feeds (set RADIO_SOURCE=rss). A Mastodon
-      # account's RSS endpoint works here too:
-      # - RSS_FEEDS=https://mastodon.social/@someScanner.rss,https://example.org/alerts.xml
+      # account's RSS endpoint works here too. See radio-worker/FEEDS.md for a
+      # vetted starter list; e.g.:
+      # - RSS_FEEDS=https://www.lcwc911.us/live-incident-list,https://mastodon.social/@BarabooScanner.rss
       - POLL_INTERVAL=10
       # Extraction: Claude when a key is set, rules fallback otherwise.
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}

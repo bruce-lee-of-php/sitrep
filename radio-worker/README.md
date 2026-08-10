@@ -77,6 +77,9 @@ Handles RSS 2.0, RSS 1.0/RDF, and Atom. Each feed is primed on first poll (its
 existing items are skipped), then new items are ingested as they appear; item
 GUIDs are namespaced per feed for dedup.
 
+See [`FEEDS.md`](FEEDS.md) for a vetted starter list of real scanner/CAD feeds
+(with coverage, format, and caveats) you can pre-populate the system with.
+
 ### One-shot injection (no inbox, no audio)
 
 ```bash
