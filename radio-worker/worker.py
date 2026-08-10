@@ -35,6 +35,12 @@ def build_source() -> RadioSource:
         )
         return MastodonSource()
 
+    if config.SOURCE == "rss":
+        from sources.rss import RssSource
+
+        print(f"[worker] source=rss feeds={len(config.RSS_FEEDS)}", flush=True)
+        return RssSource()
+
     if config.SOURCE == "openmhz":
         from sources.openmhz import OpenMHzSource
 

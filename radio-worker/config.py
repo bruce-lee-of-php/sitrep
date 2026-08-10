@@ -24,6 +24,7 @@ DB_PORT = os.getenv("POSTGRES_PORT", "5432")
 # Which source adapter to use:
 #   "text"     — watched inbox of .txt files (default, active)
 #   "mastodon" — poll a public Mastodon account's posts (active, text-only)
+#   "rss"      — poll one or more RSS/Atom feeds (active, text-only)
 #   "openmhz"  — scaffolded for later (needs faster-whisper + ffmpeg)
 SOURCE = os.getenv("RADIO_SOURCE", "text").strip().lower()
 
@@ -39,6 +40,10 @@ TEXT_ARCHIVE_DIR = os.getenv("TEXT_ARCHIVE_DIR", "/data/processed")
 MASTODON_INSTANCE = os.getenv("MASTODON_INSTANCE", "").strip()
 MASTODON_ACCOUNT = os.getenv("MASTODON_ACCOUNT", "").strip()
 MASTODON_EXCLUDE_REPLIES = _get_bool("MASTODON_EXCLUDE_REPLIES", True)
+
+# RSS source: comma-separated list of RSS/Atom feed URLs. A Mastodon account's
+# RSS endpoint (https://<instance>/@<user>.rss) works here too.
+RSS_FEEDS = [f.strip() for f in os.getenv("RSS_FEEDS", "").split(",") if f.strip()]
 
 # OpenMHz system short name (e.g. "kcers1b"). Browse https://openmhz.com to find
 # a system that carries traffic for your area. Required for the openmhz source.

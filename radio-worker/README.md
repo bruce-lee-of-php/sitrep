@@ -21,6 +21,10 @@ below).
      polls `/api/v1/accounts/:id/statuses` with a `since_id` cursor, and strips
      each post's HTML to plain text. (Twitter/X is intentionally not supported —
      its API is paywalled since 2023.)
+   - `RssSource` polls one or more **RSS/Atom feeds** (RSS 2.0, RSS 1.0/RDF, and
+     Atom) — the most portable text source. Parsing is stdlib-only. A Mastodon
+     account's RSS endpoint (`https://<instance>/@<user>.rss`) works here too, so
+     RSS is often the simplest way to consume a Mastodon feed.
 2. **Extract** (`extract/`) — pluggable. `ClaudeExtractor` (default when
    `ANTHROPIC_API_KEY` is set) returns structured JSON; `RulesExtractor` is the
    keyword/regex fallback with no key. Output `event_type` is constrained to the
@@ -60,6 +64,19 @@ On first poll it primes its cursor and skips the backlog, then ingests new posts
 as they appear. Accounts are regional and some go dormant — pick one that
 actually covers your area.
 
+### Using RSS/Atom feeds
+
+The most portable text source. Set on the `radio-worker` service:
+
+```yaml
+- RADIO_SOURCE=rss
+- RSS_FEEDS=https://mastodon.social/@someScanner.rss,https://example.org/alerts.xml
+```
+
+Handles RSS 2.0, RSS 1.0/RDF, and Atom. Each feed is primed on first poll (its
+existing items are skipped), then new items are ingested as they appear; item
+GUIDs are namespaced per feed for dedup.
+
 ### One-shot injection (no inbox, no audio)
 
 ```bash
@@ -77,6 +94,7 @@ docker-compose run --rm radio-worker python inject.py \
 | `MASTODON_INSTANCE` | _(unset)_ | e.g. `https://mastodon.social` (for `mastodon` source) |
 | `MASTODON_ACCOUNT` | _(unset)_ | e.g. `someScanner@host` or a numeric id |
 | `MASTODON_EXCLUDE_REPLIES` | `true` | Skip reply posts |
+| `RSS_FEEDS` | _(unset)_ | Comma-separated RSS/Atom feed URLs (for `rss` source) |
 | `POLL_INTERVAL` | `30` | Seconds between polls |
 | `ANTHROPIC_API_KEY` | _(unset)_ | Set to use Claude extraction; unset ⇒ rules |
 | `CLAUDE_MODEL` | `claude-sonnet-5` | Model for the Claude extractor |

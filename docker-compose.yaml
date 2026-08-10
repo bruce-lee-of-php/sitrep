@@ -71,6 +71,9 @@ services:
       # and provide the instance + account (no API key needed):
       # - MASTODON_INSTANCE=https://mastodon.social
       # - MASTODON_ACCOUNT=someScanner@mastodon.social
+      # Or poll one or more RSS/Atom feeds (set RADIO_SOURCE=rss). A Mastodon
+      # account's RSS endpoint works here too:
+      # - RSS_FEEDS=https://mastodon.social/@someScanner.rss,https://example.org/alerts.xml
       - POLL_INTERVAL=10
       # Extraction: Claude when a key is set, rules fallback otherwise.
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}

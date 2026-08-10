@@ -11,46 +11,18 @@ transmission. Dedup is by Mastodon status id (also used as the since_id cursor).
 """
 from __future__ import annotations
 
-import html
-import re
-from html.parser import HTMLParser
 from typing import List, Optional
 
 import httpx
 
 import config
 from sources.base import Call, RadioSource
-
-
-class _TextExtractor(HTMLParser):
-    """Collapse Mastodon post HTML into readable plain text."""
-
-    def __init__(self):
-        super().__init__()
-        self._parts: List[str] = []
-
-    def handle_starttag(self, tag, attrs):
-        if tag in ("br", "p"):
-            self._parts.append("\n")
-
-    def handle_data(self, data):
-        self._parts.append(data)
-
-    def get_text(self) -> str:
-        text = "".join(self._parts)
-        text = html.unescape(text)
-        # Normalise whitespace; keep it single-line-ish for the extractor.
-        text = re.sub(r"\s+", " ", text).strip()
-        return text
+from sources.textutil import html_to_text
 
 
 def status_to_text(content_html: str) -> str:
     """Public helper (unit-tested): Mastodon HTML content -> plain text."""
-    if not content_html:
-        return ""
-    parser = _TextExtractor()
-    parser.feed(content_html)
-    return parser.get_text()
+    return html_to_text(content_html)
 
 
 def statuses_to_calls(statuses: list, instance: str) -> List[Call]:
